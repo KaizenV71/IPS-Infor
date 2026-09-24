@@ -1,388 +1,868 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latihan Soal PTS Kelas 8 - SMPN 9 Jakarta</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --correct: #16a34a;
-            --wrong: #dc2626;
-            --border: #e2e8f0;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulasi PSTS / ASTS - Informatika & IPS Kelas 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --card-border: #23314d;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 12px;
+      line-height: 1.6;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+    .app-container { width: 100%; max-width: 900px; margin: 0 auto; }
+    .hidden { display: none !important; }
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
+    /* CARD STYLES */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
 
-        h1 {
-            color: var(--primary);
-            margin: 0 0 10px 0;
-            font-size: 24px;
-        }
+    /* HOME SCREEN */
+    .hero-title {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .hero-title h1 {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .hero-title p { color: var(--text-muted); font-size: 14px; }
 
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media(min-width: 600px) { .subject-grid { grid-template-columns: 1fr 1fr; } }
 
-        .tab-btn {
-            padding: 12px 24px;
-            border: none;
-            background: #e2e8f0;
-            color: var(--text);
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+    .card-subject {
+      background: linear-gradient(145deg, #18233c, #111827);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-subject:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.3);
+    }
+    .card-subject h3 { font-size: 20px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .card-subject p { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+    .badge-info {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-        }
+    /* QUIZ LAYOUT */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .quiz-title { font-weight: 700; font-size: 16px; color: #93c5fd; }
+    .timer-badge {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-        .score-board {
-            position: sticky;
-            top: 10px;
-            z-index: 100;
-            background: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-            border-left: 5px solid var(--primary);
-        }
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
 
-        .quiz-section {
-            display: none;
-        }
+    .meta-tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .tag-topic { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
 
-        .quiz-section.active {
-            display: block;
-        }
+    .question-box {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #f8fafc;
+      white-space: pre-line;
+    }
 
-        .question-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border);
-        }
+    .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .btn-opt {
+      background: #18233c;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--text-main);
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    .btn-opt:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #202e4d;
+      transform: translateX(3px);
+    }
+    .opt-prefix {
+      font-weight: 800;
+      color: var(--primary);
+      min-width: 20px;
+    }
+    .btn-opt.selected {
+      border-color: var(--primary) !important;
+      background: rgba(59, 130, 246, 0.2) !important;
+    }
+    .btn-opt.correct {
+      border-color: var(--success) !important;
+      background: var(--success-bg) !important;
+      color: #6ee7b7;
+    }
+    .btn-opt.wrong {
+      border-color: var(--danger) !important;
+      background: var(--danger-bg) !important;
+      color: #fca5a5;
+    }
 
-        .question-text {
-            font-weight: 600;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
+    .explanation-box {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+    /* CONTROLS & NAV GRID */
+    .quiz-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: var(--card-border); color: var(--text-main); }
+    .btn-secondary:hover { background: #334155; }
+    .btn-warning { background: var(--warning-bg); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .btn-warning.active { background: var(--warning); color: #000; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 
-        .option-btn {
-            padding: 12px 15px;
-            border: 1px solid var(--border);
-            background: white;
-            border-radius: 6px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
+    /* NAVIGATION MODAL / DRAWER */
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+    }
+    .nav-num {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background: #18233c;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .nav-num.active { border-color: #fff; ring: 2px solid var(--primary); }
+    .nav-num.answered { background: rgba(59, 130, 246, 0.3); border-color: var(--primary); }
+    .nav-num.flagged::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 6px;
+      height: 6px;
+      background: var(--warning);
+      border-radius: 50%;
+    }
 
-        .option-btn:hover:not([disabled]) {
-            background: #eff6ff;
-            border-color: #93c5fd;
-        }
+    /* RESULT SCREEN */
+    .score-banner {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(19,27,46,1) 70%);
+      border: 4px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+    .score-number { font-size: 42px; font-weight: 800; color: #fff; line-height: 1; }
+    .score-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        .option-btn.correct {
-            background-color: #dcfce7 !important;
-            border-color: var(--correct) !important;
-            color: #14532d;
-            font-weight: bold;
-        }
+    .analysis-card {
+      background: #18233c;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    .analysis-card h4 { font-size: 15px; margin-bottom: 10px; color: #93c5fd; }
+    .weakness-list { list-style: none; font-size: 13px; }
+    .weakness-list li { padding: 4px 0; color: #fca5a5; display: flex; align-items: center; gap: 6px; }
 
-        .option-btn.wrong {
-            background-color: #fee2e2 !important;
-            border-color: var(--wrong) !important;
-            color: #7f1d1d;
-        }
-
-        .explanation {
-            margin-top: 15px;
-            padding: 12px;
-            background: #f1f5f9;
-            border-radius: 6px;
-            font-size: 13px;
-            display: none;
-            border-left: 3px solid #64748b;
-        }
-    </style>
+    .review-list { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .review-item {
+      background: #18233c;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 14px;
+    }
+    .review-item.is-correct { border-left: 4px solid var(--success); }
+    .review-item.is-wrong { border-left: 4px solid var(--danger); }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Latihan Soal PTS/ASTS Ganjil Class VIII</h1>
-        <p style="margin: 0; color: #64748b;">SMP Negeri 9 Jakarta - Tahun Ajaran 2026/2027</p>
-    </header>
+  <div class="app-container">
 
-    <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchSubject('informa')">Informatika (50 Soal)</button>
-        <button class="tab-btn" onclick="switchSubject('ips')">IPS (50 Soal)</button>
+    <!-- HOME SCREEN -->
+    <div id="screen-home" class="card">
+      <div class="hero-title">
+        <h1>Simulasi Ujian PSTS / ASTS</h1>
+        <p>Kelas 8 SMP - Bank Soal Lengkap & Pembahasan Interaktif</p>
+      </div>
+
+      <div class="subject-grid">
+        <div class="card-subject" onclick="initQuiz('informa')">
+          <h3>💻 Informatika</h3>
+          <p>Berpikir Komputasional, Sistem Bilangan (Biner/Oktal/Hexa), & TIK/Pengolah Kata/Angka.</p>
+
+          <span class="badge-info">50 Soal • Pilihan Ganda</span>
+        </div>
+
+        <div class="card-subject" onclick="initQuiz('ips')">
+          <h3>🌏 Ilmu Pengetahuan Sosial</h3>
+          <p>Kondisi Geografis, SDA, Fauna, Ekonomi Hijau, Keragaman Budaya, & Interaksi Sosial.</p>
+          <span class="badge-info">50 Soal • Pilihan Ganda</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 10px;">
+        <button id="btn-resume" class="btn btn-warning hidden" onclick="resumeQuiz()" style="margin: 0 auto;">
+          ▶ Teruskan Ujian Terakhir yang Belum Selesai
+        </button>
+      </div>
     </div>
 
-    <div class="score-board">
-        <div>Mata Pelajaran: <span id="current-subject-title">Informatika</span></div>
-        <div>Skor: <span id="score-display">0</span> / <span id="total-answered">0</span> Terjawab</div>
+    <!-- QUIZ SCREEN -->
+    <div id="screen-quiz" class="card hidden">
+      <div class="quiz-header">
+        <div class="quiz-title" id="quiz-title">Mata Pelajaran</div>
+        <div class="timer-badge" id="timer-display">⏱️ Waktu: 00:00</div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+
+      <div class="meta-tags">
+        <span class="tag tag-topic" id="tag-topic">Topik</span>
+      </div>
+
+      <div class="question-box" id="question-text"></div>
+
+      <div class="options-grid" id="options-container"></div>
+
+      <div class="explanation-box hidden" id="explanation-box"></div>
+
+      <div class="quiz-controls">
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="prevQuestion()" id="btn-prev">⬅️</button>
+          <button class="btn btn-secondary" onclick="nextQuestion()" id="btn-next">➡️</button>
+          <button class="btn btn-warning" onclick="toggleFlag()" id="btn-flag">🚩 Ragu</button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="toggleNavGrid()">🔢 Navigasi Soal</button>
+          <button class="btn btn-primary" onclick="confirmFinish()">🏁 Selesai Ujian</button>
+        </div>
+      </div>
+
+      <div class="nav-grid hidden" id="nav-grid"></div>
     </div>
 
-    <!-- SEKSI INFORMATIKA -->
-    <div id="informa-section" class="quiz-section active"></div>
+    <!-- RESULT SCREEN -->
+    <div id="screen-result" class="card hidden">
+      <div class="score-banner">
+        <h2>Hasil Simulasi Ujian</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">PSTS / ASTS Kelas 8 SMP</p>
 
-    <!-- SEKSI IPS -->
-    <div id="ips-section" class="quiz-section"></div>
-</div>
+        <div class="score-circle">
+          <div class="score-number" id="final-score">0</div>
+          <div class="score-label">NILAI AKHIR</div>
+        </div>
+
+        <p id="score-summary" style="font-size: 15px; font-weight: 600;"></p>
+      </div>
+
+      <div class="analysis-card">
+        <h4>📊 Analisis & Saran Evaluasi</h4>
+        <div id="analysis-text" style="font-size: 13.5px; color: var(--text-muted);"></div>
+        <div id="weakness-box" style="margin-top: 10px;"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+        <h3>Review & Pembahasan Soal</h3>
+        <button class="btn btn-secondary" onclick="goHome()">🏠 Kembali ke Menu</button>
+      </div>
+
+      <div class="review-list" id="review-list"></div>
+    </div>
+
+  </div>
 
 <script>
-const dataInformatika = [
-    { q: "1. Pendekatan dalam merumuskan masalah dan solusinya sehingga dapat dijalankan oleh agen pemroses informasi dinamakan...", o: ["A. Berpikir Kritis", "B. Berpikir Komputasional", "C. Berpikir Kreatif", "D. Berpikir Komunikasi"], a: 1, e: "Berpikir Komputasional adalah metode memecahkan masalah dengan prinsip ilmu komputer." },
-    { q: "2. Tokoh ilmuwan komputer yang mempopulerkan kembali istilah Computational Thinking pada tahun 2006 adalah...", o: ["A. Alan Turing", "B. Jeannette Wing", "C. Charles Babbage", "D. Ada Lovelace"], a: 1, e: "Jeannette Wing mempopulerkan Computational Thinking pada tahun 2006." },
-    { q: "3. Pernyataan berikut yang BUKAN merupakan karakteristik dari berpikir komputasional adalah...", o: ["A. Mampu memberikan pemecahan masalah menggunakan komputer", "B. Memetakan data melalui abstraksi", "C. Mengandalkan kemampuan hafalan tanpa analisis", "D. Mampu melakukan generalisasi solusi"], a: 2, e: "Berpikir komputasional mengutamakan analisis dan logika, bukan hafalan." },
-    { q: "4. Hubungan antara teknik komputasional dan pemikiran matematis dalam CT adalah...", o: ["A. Matematika hanya untuk menghitung angka", "B. Memanfaatkan prinsip matematika untuk menyusun algoritma terstruktur", "C. CT menggantikan seluruh rumus matematika", "D. Teknik komputasional tidak butuh logika"], a: 1, e: "CT mengombinasikan logika pemikiran matematis untuk merancang algoritma." },
-    { q: "5. Karakteristik CT yang mengutamakan gagasan/ide dibanding benda fisik adalah...", o: ["A. Berorientasi pada benda fisik", "B. Mengutamakan konsep/ide daripada benda", "C. Memprioritaskan harga perangkat", "D. Bergantung pada merek aplikasi"], a: 1, e: "CT berfokus pada konsep penyelesaian masalah, bukan pada perangkat kerasnya." },
-    { q: "6. Pengertian dari sistem bilangan dalam ilmu komputer adalah...", o: ["A. Aturan mengukur kecepatan prosesor", "B. Cara mewakili besaran item fisik menggunakan basis tertentu", "C. Metode menggambar grafis", "D. Urutan tombol pada keyboard"], a: 1, e: "Sistem bilangan adalah cara untuk mewakili nilai besaran dengan basis tertentu." },
-    { q: "7. Sistem bilangan yang menggunakan basis 10 angka (0-9) disebut sistem...", o: ["A. Biner", "B. Oktal", "C. Desimal", "D. Hexadesimal"], a: 2, e: "Desimal menggunakan basis 10." },
-    { q: "8. Sistem bilangan yang mempunyai basis 8 digit angka (0-7) dinamakan sistem...", o: ["A. Desimal", "B. Biner", "C. Hexadesimal", "D. Oktal"], a: 3, e: "Oktal menggunakan basis 8." },
-    { q: "9. Basis dan digit angka yang digunakan dalam sistem bilangan biner adalah...", o: ["A. Basis 2, angka 0 dan 1", "B. Basis 8, angka 0-7", "C. Basis 10, angka 0-9", "D. Basis 16, angka 0-F"], a: 0, e: "Biner berbaris 2 yaitu angka 0 dan 1." },
-    { q: "10. Jumlah basis angka/simbol yang digunakan pada sistem bilangan hexadesimal adalah...", o: ["A. 2", "B. 8", "C. 10", "D. 16"], a: 3, e: "Hexadesimal berbasis 16 (0-9 dan A-F)." },
-    { q: "11. Hasil konversi bilangan desimal 112 ke dalam bentuk biner adalah...", o: ["A. 1110000", "B. 1101000", "C. 1011000", "D. 1110001"], a: 0, e: "112 = 64 + 32 + 16 = 1110000 (biner)." },
-    { q: "12. Hasil konversi bilangan desimal 133 ke dalam bentuk biner adalah...", o: ["A. 10000101", "B. 10000110", "C. 10100101", "D. 11000101"], a: 0, e: "133 = 128 + 4 + 1 = 10000101 (biner)." },
-    { q: "13. Hasil konversi bilangan desimal 186 ke dalam bentuk biner adalah...", o: ["A. 10111010", "B. 10111001", "C. 11011010", "D. 10101010"], a: 0, e: "186 = 128 + 32 + 16 + 8 + 2 = 10111010 (biner)." },
-    { q: "14. Hasil konversi bilangan desimal 820 ke dalam bentuk oktal adalah...", o: ["A. 1464", "B. 1474", "C. 1564", "D. 1264"], a: 0, e: "820 dibagi 8 secara bertahap menghasilkan sisa 1464 (oktal)." },
-    { q: "15. Hasil konversi bilangan desimal 916 ke dalam bentuk oktal adalah...", o: ["A. 1624", "B. 1625", "C. 1724", "D. 1524"], a: 0, e: "916 dibagi 8 secara bertahap menghasilkan sisa 1624 (oktal)." },
-    { q: "16. Hasil konversi bilangan biner 1111100 ke dalam bentuk desimal adalah...", o: ["A. 120", "B. 124", "C. 128", "D. 130"], a: 1, e: "64 + 32 + 16 + 8 + 4 = 124." },
-    { q: "17. Jika diketahui posisi konversi oktal ke desimal adalah (2x8²) + (5x8¹) + (3x8⁰), maka total nilai desimalnya adalah...", o: ["A. 168", "B. 171", "C. 173", "D. 180"], a: 2, e: "128 + 40 + 3 = 173." },
-    { q: "18. Hasil konversi bilangan oktal 1115 ke dalam bentuk desimal adalah...", o: ["A. 589", "B. 588", "C. 590", "D. 595"], a: 0, e: "(1x512) + (1x64) + (1x8) + (5x1) = 589." },
-    { q: "19. Hasil konversi bilangan desimal 2212 ke dalam bentuk hexadesimal adalah...", o: ["A. 8A4", "B. 8A2", "C. 8B4", "D. 8A5"], a: 0, e: "2212/16 sisa 4, 138/16 sisa 10 (A), 8/16 sisa 8 -> 8A4." },
-    { q: "20. Hasil konversi bilangan hexadesimal 1B2 ke dalam bentuk desimal adalah...", o: ["A. 434", "B. 432", "C. 430", "D. 435"], a: 0, e: "(1x256) + (11x16) + (2x1) = 256 + 176 + 2 = 434." },
-    { q: "21. Simbol huruf C pada sistem bilangan hexadesimal mewakili nilai desimal...", o: ["A. 10", "B. 11", "C. 12", "D. 13"], a: 2, e: "A=10, B=11, C=12." },
-    { q: "22. Nilai desimal 13 dalam sistem bilangan hexadesimal disimbolkan dengan huruf...", o: ["A. B", "B. C", "C. D", "D. E"], a: 2, e: "13 diwakili oleh simbol D." },
-    { q: "23. Simbol huruf A pada sistem bilangan hexadesimal mewakili nilai desimal...", o: ["A. 10", "B. 11", "C. 12", "D. 15"], a: 0, e: "A mewakili nilai 10." },
-    { q: "24. Nilai desimal 15 dalam sistem bilangan hexadesimal disimbolkan dengan huruf...", o: ["A. D", "B. E", "C. F", "D. G"], a: 2, e: "15 diwakili oleh simbol F." },
-    { q: "25. Pembagian desimal menghasilkan sisa bagi dari bawah ke atas: 10 (A), 11 (B), dan 15 (F). Penulisan hexadesimalnya adalah...", o: ["A. ABF", "B. FAB", "C. FBA", "D. BFA"], a: 1, e: "Penulisan dilakukan dari sisa terakhir (bawah ke atas): F-A-B." },
-    { q: "26. Definisi umum dari program aplikasi komputer adalah...", o: ["A. Perangkat keras penyimpan data", "B. Perangkat lunak untuk membantu tugas pengguna tertentu", "C. Penyeimbang daya listrik", "D. Komponen fisik gambar"], a: 1, e: "Program aplikasi adalah perangkat lunak pendukung tugas spesifik." },
-    { q: "27. Fungsi dasar dari aplikasi pengolah kata (word processor) adalah...", o: ["A. Mengolah angka", "B. Membuat dan memformat dokumen berbasis teks", "C. Membuat slide gambar", "D. Mengelola basis data"], a: 1, e: "Fungsi utama word processor adalah mengolah dokumen teks." },
-    { q: "28. Kelompok aplikasi yang semuanya termasuk kelompok aplikasi perkantoran adalah...", o: ["A. Ms. Word, Ms. Excel, Ms. PowerPoint", "B. Photoshop, Corel, Word", "C. Excel, Chrome, VLC", "D. CapCut, PowerPoint, AutoCAD"], a: 0, e: "Ms Word, Excel, dan PowerPoint adalah paket aplikasi perkantoran." },
-    { q: "29. Fungsi utama aplikasi pengolah lembar kerja (spreadsheet) adalah...", o: ["A. Menyusun tata letak buku", "B. Mengolah data angka, tabel, dan perhitungan", "C. Mengedit video", "D. Mengirim email"], a: 1, e: "Spreadsheet dirancang untuk mengolah data angka dan rumus." },
-    { q: "30. Aplikasi pengolah presentasi memiliki fungsi utama untuk...", o: ["A. Menghitung laporan", "B. Mengetik surat", "C. Menampilkan informasi dalam bentuk slide menarik", "D. Mengompresi berkas"], a: 2, e: "Presentasi berfungsi menyampaikan informasi visual melalui slide." },
-    { q: "31. Perangkat lunak pengolah kata yang paling populer digunakan adalah...", o: ["A. Microsoft Word", "B. Microsoft Access", "C. Adobe Reader", "D. Notepad++"], a: 0, e: "Microsoft Word merupakan pengolah kata paling populer." },
-    { q: "32. Contoh penggunaan utama aplikasi pengolah kata adalah...", o: ["A. Membuat laporan makalah dan surat", "B. Menghitung gaji otomatis", "C. Mendesain animasi 3D", "D. Memutar audio"], a: 0, e: "Pengolah kata digunakan untuk pembuatan makalah, dokumen, dan surat." },
-    { q: "33. Perangkat lunak pengolah angka yang paling umum digunakan adalah...", o: ["A. PowerPoint", "B. Microsoft Excel", "C. Publisher", "D. Word"], a: 1, e: "Microsoft Excel adalah pengolah angka standar industri." },
-    { q: "34. Fungsi utama penggunaan aplikasi pengolah angka adalah...", o: ["A. Membuat grafik dan tabel perhitungan rumus", "B. Mengedit foto", "C. Menulis naskah", "D. Desain brosur"], a: 0, e: "Excel berfungsi mengolah rumus, angka, dan grafik." },
-    { q: "35. Istilah untuk menyebut seluruh file/berkas kerja pada Microsoft Excel adalah...", o: ["A. Worksheet", "B. Workbook", "C. Document", "D. Slide"], a: 1, e: "Workbook adalah sebutan untuk satu file Excel." },
-    { q: "36. Nama perangkat lunak pengolah presentasi yang paling umum digunakan adalah...", o: ["A. Word", "B. Excel", "C. Microsoft PowerPoint", "D. Outlook"], a: 2, e: "Microsoft PowerPoint adalah perangkat lunak presentasi umum." },
-    { q: "37. Fungsi utama aplikasi pengolah presentasi adalah...", o: ["A. Mempermudah penyampaian materi dengan media visual", "B. Mengolah rumus logaritma", "C. Memperbaiki OS", "D. Mengurutkan nama"], a: 0, e: "Presentasi mempermudah penyampaian materi visual." },
-    { q: "38. Contoh ekstensi berkas dokumen hasil simpanan Microsoft Word modern adalah...", o: ["A. .xlsx", "B. .docx", "C. .pptx", "D. .mp4"], a: 1, e: "Format standar Word adalah .docx." },
-    { q: "39. Ekstensi berkas standar untuk file lembar kerja Microsoft Excel adalah...", o: ["A. .docx", "B. .xlsx", "C. .pdf", "D. .txt"], a: 1, e: "Format standar Excel adalah .xlsx." },
-    { q: "40. Kepanjangan dari istilah format dokumen PDF adalah...", o: ["A. Portable Document Format", "B. Personal Data File", "C. Public Document Form", "D. Print Document Format"], a: 0, e: "PDF singkatan dari Portable Document Format." },
-    { q: "41. Fungsi utama dari aplikasi Microsoft Publisher adalah...", o: ["A. Mengolah angka", "B. Desain tata letak publikasi seperti brosur dan kalender", "C. Pemrograman", "D. Surat standar"], a: 1, e: "Publisher merupakan aplikasi Desktop Publishing untuk brosur/poster." },
-    { q: "42. Pilihan orientasi cetak halaman kertas secara mendatar/horizontal disebut...", o: ["A. Portrait", "B. Landscape", "C. Center", "D. Justify"], a: 1, e: "Landscape adalah tampilan kertas mendatar." },
-    { q: "43. Rumus spreadsheet yang digunakan untuk menghitung nilai rata-rata adalah...", o: ["A. =SUM()", "B. =AVERAGE()", "C. =COUNT()", "D. =MAX()"], a: 1, e: "AVERAGE digunakan untuk menghitung rata-rata." },
-    { q: "44. Fungsi spreadsheet untuk menjumlahkan nilai dengan kriteria tertentu adalah...", o: ["A. =SUM()", "B. =SUMIF()", "C. =COUNTIF()", "D. =AVERAGEIF()"], a: 1, e: "SUMIF menjumlahkan angka berdasarkan syarat tertentu." },
-    { q: "45. Fungsi teks pada spreadsheet untuk mencari posisi karakter/kata tertentu adalah...", o: ["A. SEARCH / FIND", "B. CONCATENATE", "C. LEFT", "D. MID"], a: 0, e: "SEARCH/FIND mencari letak posisi karakter." },
-    { q: "46. Fungsi teks untuk menggantikan sebagian karakter teks dengan karakter baru adalah...", o: ["A. UPPER", "B. REPLACE", "C. LOWER", "D. LEN"], a: 1, e: "REPLACE mengganti karakter teks sesuai posisi tertentu." },
-    { q: "47. Ukuran kertas standar yang memiliki dimensi 210 x 297 mm adalah...", o: ["A. A4", "B. F4 / Folio", "C. Letter", "D. Legal"], a: 0, e: "A4 berukuran 210 x 297 mm." },
-    { q: "48. Ukuran kertas standar yang memiliki dimensi 215 x 330 mm adalah...", o: ["A. A4", "B. F4 / Folio", "C. A3", "D. B5"], a: 1, e: "F4 / Folio berukuran 215 x 330 mm." },
-    { q: "49. Urutan perintah untuk menyisipkan gambar pada Microsoft Word adalah...", o: ["A. Home -> Paste", "B. Insert -> Pictures -> This Device", "C. View -> Layout", "D. File -> Save As"], a: 1, e: "Menyisipkan gambar dilakukan lewat menu Insert -> Pictures." },
-    { q: "50. Fungsi dari tombol/fitur perintah Undo (Ctrl + Z) adalah...", o: ["A. Membatalkan tindakan atau perintah terakhir", "B. Mengulang perintah", "C. Menyimpan otomatis", "D. Menghapus teks"], a: 0, e: "Undo membatalkan perintah terakhir yang dijalankan." }
+// BANK SOAL INFORMATIKA (50 SOAL)
+const rawInformatika = [
+  { q: "Pendekatan dalam merumuskan masalah dan solusinya sehingga solusi tersebut dapat dijalankan oleh agen pemroses informasi dinamakan...", o: ["Berpikir Kritis", "Berpikir Komputasional", "Berpikir Kreatif", "Berpikir Komunikasi"], c: 1, topic: "Berpikir Komputasional", e: "Berpikir komputasional (CT) adalah metode pemecahan masalah yang dirancang agar dapat diselesaikan oleh manusia atau komputer." },
+  { q: "Tokoh ilmuwan komputer yang mempopulerkan kembali istilah Computational Thinking pada tahun 2006 adalah...", o: ["Alan Turing", "Jeannette Wing", "Charles Babbage", "Ada Lovelace"], c: 1, topic: "Berpikir Komputasional", e: "Jeannette Wing mempopulerkan kembali istilah Computational Thinking pada artikelnya tahun 2006." },
+  { q: "Pernyataan berikut yang BUKAN merupakan karakteristik dari berpikir komputasional adalah...", o: ["Mampu memberikan pemecahan masalah menggunakan komputer", "Memetakan data melalui abstraksi", "Mengandalkan kemampuan hafalan tanpa analisis", "Mampu melakukan generalisasi solusi untuk berbagai masalah"], c: 2, topic: "Berpikir Komputasional", e: "CT mengedepankan analisis logika dan pemecahan masalah, bukan sekadar hafalan." },
+  { q: "Berpikir komputasional mengombinasikan teknik analisis dengan pemikiran matematis. Pernyataan yang menggambarkan hubungan ini adalah...", o: ["Matematika hanya digunakan untuk menghitung angka, bukan logika", "Pemikiran komputasional memanfaatkan prinsip matematika untuk menyusun algoritma terstruktur", "Berpikir komputasional menggantikan seluruh rumus matematika", "Teknik komputasional tidak membutuhkan logika matematika"], c: 1, topic: "Berpikir Komputasional", e: "CT memanfaatkan logika dan struktur pemikiran matematis dalam memformulasikan algoritma." },
+  { q: "Karakteristik berpikir komputasional yang menekankan pada konsep dan ide abstrak dibandingkan perangkat keras (hardware) adalah...", o: ["Berorientasi pada benda fisik", "Mengutamakan gagasan/ide daripada benda", "Memprioritaskan harga perangkat komputer", "Bergantung pada merek aplikasi yang digunakan"], c: 1, topic: "Berpikir Komputasional", e: "CT adalah konseptualisasi, yaitu mengutamakan gagasan/konsep pemecahan masalah dibanding alat fisik." },
+  { q: "Pengertian dari sistem bilangan dalam ilmu komputer adalah...", o: ["Aturan untuk mengukur kecepatan prosesor", "Suatu cara untuk mewakili besaran dari suatu item fisik menggunakan basis (radiks) tertentu", "Metode untuk menggambar grafis pada layar", "Urutan tombol pada papan ketik (keyboard)"], c: 1, topic: "Sistem Bilangan", e: "Sistem bilangan adalah simbol/sistem yang digunakan untuk mewakili besaran angka berdasar radiks/basis." },
+  { q: "Sistem bilangan yang menggunakan basis 10 angka (0, 1, 2, 3, 4, 5, 6, 7, 8, 9) disebut sistem bilangan...", o: ["Biner", "Oktal", "Desimal", "Hexadesimal"], c: 2, topic: "Sistem Bilangan", e: "Sistem bilangan sehari-hari adalah Desimal (basis 10)." },
+  { q: "Sistem bilangan yang mempunyai basis 8 digit angka (0 sampai 7) dinamakan sistem...", o: ["Desimal", "Biner", "Hexadesimal", "Oktal"], c: 3, topic: "Sistem Bilangan", e: "Sistem Oktal menggunakan basis 8 (0-7)." },
+  { q: "Basis dan digit angka yang digunakan dalam sistem bilangan biner adalah...", o: ["Basis 2, yaitu angka 0 dan 1", "Basis 8, yaitu angka 0 sampai 7", "Basis 10, yaitu angka 0 sampai 9", "Basis 16, yaitu angka 0 sampai F"], c: 0, topic: "Sistem Bilangan", e: "Biner berdasar pada basis 2, yaitu angka 0 dan 1." },
+  { q: "Jumlah basis angka/simbol yang digunakan pada sistem bilangan hexadesimal adalah...", o: ["2", "8", "10", "16"], c: 3, topic: "Sistem Bilangan", e: "Hexadesimal berbasis 16 (0-9 dan A-F)." },
+  { q: "Hasil konversi bilangan desimal 112 ke dalam bentuk biner adalah...", o: ["1110000₂", "1101000₂", "1011000₂", "1110001₂"], c: 0, topic: "Konversi Bilangan", e: "112 = 64 + 32 + 16 = 2⁶ + 2⁵ + 2⁴ = 1110000₂." },
+  { q: "Hasil konversi bilangan desimal 133 ke dalam bentuk biner adalah...", o: ["10000101₂", "10000110₂", "10100101₂", "11000101₂"], c: 0, topic: "Konversi Bilangan", e: "133 = 128 + 4 + 1 = 2⁷ + 2² + 2⁰ = 10000101₂." },
+  { q: "Hasil konversi bilangan desimal 186 ke dalam bentuk biner adalah...", o: ["10111010₂", "10111001₂", "11011010₂", "10101010₂"], c: 0, topic: "Konversi Bilangan", e: "186 = 128 + 32 + 16 + 8 + 2 = 10111010₂." },
+  { q: "Hasil konversi bilangan desimal 820 ke dalam bentuk oktal adalah...", o: ["1464₈", "1474₈", "1564₈", "1264₈"], c: 0, topic: "Konversi Bilangan", e: "820/8 = 102 sisa 4; 102/8 = 12 sisa 6; 12/8 = 1 sisa 4; 1/8 = 0 sisa 1. Hasil: 1464₈." },
+  { q: "Hasil konversi bilangan desimal 916 ke dalam bentuk oktal adalah...", o: ["1624₈", "1625₈", "1724₈", "1524₈"], c: 0, topic: "Konversi Bilangan", e: "916/8 = 114 sisa 4; 114/8 = 14 sisa 2; 14/8 = 1 sisa 6; 1/8 = 0 sisa 1. Hasil: 1624₈." },
+  { q: "Hasil konversi bilangan biner 1111100₂ ke dalam bentuk desimal adalah...", o: ["120", "124", "128", "130"], c: 1, topic: "Konversi Bilangan", e: "64 + 32 + 16 + 8 + 4 = 124." },
+  { q: "Jika diketahui posisi konversi oktal ke desimal adalah (2 × 8²) + (5 × 8¹) + (3 × 8⁰), maka total nilai desimalnya adalah...", o: ["168", "171", "173", "180"], c: 2, topic: "Konversi Bilangan", e: "(2 × 64) + (5 × 8) + (3 × 1) = 128 + 40 + 3 = 173." },
+  { q: "Hasil konversi bilangan oktal 1115₈ ke dalam bentuk desimal adalah...", o: ["589", "588", "590", "595"], c: 0, topic: "Konversi Bilangan", e: "(1 × 512) + (1 × 64) + (1 × 8) + (5 × 1) = 512 + 64 + 8 + 5 = 589." },
+  { q: "Hasil konversi bilangan desimal 2212 ke dalam bentuk hexadesimal adalah...", o: ["8A4₁₆", "8A2₁₆", "8B4₁₆", "8A5₁₆"], c: 0, topic: "Konversi Bilangan", e: "2212/16 = 138 sisa 4; 138/16 = 8 sisa 10 (A); 8/16 = 0 sisa 8. Hasil: 8A4₁₆." },
+  { q: "Hasil konversi bilangan hexadesimal 1B2₁₆ ke dalam bentuk desimal adalah...", o: ["434", "432", "430", "435"], c: 0, topic: "Konversi Bilangan", e: "(1 × 256) + (11 × 16) + (2 × 1) = 256 + 176 + 2 = 434." },
+  { q: "Simbol huruf C pada sistem bilangan hexadesimal mewakili nilai desimal...", o: ["10", "11", "12", "13"], c: 2, topic: "Sistem Bilangan", e: "A=10, B=11, C=12, D=13, E=14, F=15." },
+  { q: "Nilai desimal 13 dalam sistem bilangan hexadesimal disimbolkan dengan huruf...", o: ["B", "C", "D", "E"], c: 2, topic: "Sistem Bilangan", e: "Nilai desimal 13 = D." },
+  { q: "Simbol huruf A pada sistem bilangan hexadesimal mewakili nilai desimal...", o: ["10", "11", "12", "15"], c: 0, topic: "Sistem Bilangan", e: "A mewakili nilai 10." },
+  { q: "Nilai desimal 15 dalam sistem bilangan hexadesimal disimbolkan dengan huruf...", o: ["D", "E", "F", "G"], c: 2, topic: "Sistem Bilangan", e: "15 disimbolkan dengan F." },
+  { q: "Pembagian desimal menghasilkan sisa bagi berturut-turut dari bawah ke atas: 10 (A), 11 (B), dan 15 (F). Penulisan nilai hexadesimal yang benar adalah...", o: ["ABF", "FAB", "FBA", "BFA"], c: 1, topic: "Konversi Bilangan", e: "Penyusunan sisa bagi dari bawah ke atas: F, A, B -> FAB." },
+  { q: "Definisi umum dari program aplikasi pada komputer adalah...", o: ["Perangkat keras untuk menyimpan data", "Perangkat lunak yang dirancang untuk membantu pengguna melakukan tugas-tugas tertentu", "Sistem operasi penyeimbang daya arus listrik", "Komponen fisik penampil gambar"], c: 1, topic: "Aplikasi Perkantoran", e: "Program aplikasi adalah software penunjang tugas spesifik pengguna." },
+  { q: "Fungsi dasar dari aplikasi pengolah kata (word processor) adalah...", o: ["Mengolah angka dan statistik", "Membuat, menyunting, dan memformat dokumen berbasis teks", "Membuat slide presentasi bergambar", "Mengelola basis data perusahaan"], c: 1, topic: "Aplikasi Pengolah Kata", e: "Fungsi pengolah kata adalah mengolah naskah teks/dokumen." },
+  { q: "Di antara kelompok aplikasi berikut, yang semuanya termasuk dalam kelompok aplikasi perkantoran adalah...", o: ["Ms. Word, Ms. Excel, Ms. PowerPoint", "Adobe Photoshop, CorelDRAW, Ms. Word", "Ms. Excel, Google Chrome, VLC Player", "CapCut, Ms. PowerPoint, AutoCAD"], c: 0, topic: "Aplikasi Perkantoran", e: "Word, Excel, dan PowerPoint adalah tiga pilar utama Microsoft Office." },
+  { q: "Fungsi utama dari aplikasi pengolah lembar kerja (spreadsheet) adalah...", o: ["Menyusun tata letak buku", "Mengolah data angka, tabel, dan perhitungan matematika", "Mengedit video dan musik", "Mengirim email secara otomatis"], c: 1, topic: "Aplikasi Pengolah Angka", e: "Spreadsheet dirancang untuk mengolah angka, tabel, dan formula rumus." },
+  { q: "Aplikasi pengolah presentasi memiliki fungsi utama untuk...", o: ["Mengkalkulasi laporan keuangan", "Mengetik surat resmi", "Menampilkan gagasan/informasi dalam bentuk slide yang menarik", "Mengompresi ukuran berkas"], c: 2, topic: "Aplikasi Presentasi", e: "Aplikasi presentasi menyajikan ide secara visual dalam slide." },
+  { q: "Perangkat lunak pengolah kata yang paling populer dan umum digunakan pada sistem operasi Windows adalah...", o: ["Microsoft Word", "Microsoft Access", "Adobe Reader", "Notepad++"], c: 0, topic: "Aplikasi Pengolah Kata", e: "Microsoft Word paling mendominasi di OS Windows." },
+  { q: "Salah satu fungsi utama penggunaan aplikasi pengolah kata dalam kehidupan sehari-hari adalah...", o: ["Membuat laporan makalah dan surat", "Menghitung gaji karyawan secara otomatis", "Mendesain animasi 3D", "Memutar file audio"], c: 0, topic: "Aplikasi Pengolah Kata", e: "Digunakan untuk penyusunan makalah, surat, dan proposal." },
+  { q: "Perangkat lunak pengolah angka yang paling umum digunakan adalah...", o: ["Microsoft PowerPoint", "Microsoft Excel", "Microsoft Publisher", "Microsoft Word"], c: 1, topic: "Aplikasi Pengolah Angka", e: "Microsoft Excel adalah pengolah angka terpopuler." },
+  { q: "Identifikasi fungsi utama dari penggunaan aplikasi pengolah angka adalah...", o: ["Membuat grafik dan tabel perhitungan rumus", "Mengedit gambar foto", "Menulis naskah novel", "Membuat desain brosur"], c: 0, topic: "Aplikasi Pengolah Angka", e: "Excel memudahkan perhitungan statistik dan pembuatan grafik." },
+  { q: "Istilah untuk menyebut seluruh file/berkas kerja pada Microsoft Excel yang terdiri dari beberapa lembar kerja adalah...", o: ["Worksheet", "Workbook", "Document", "Slide"], c: 1, topic: "Aplikasi Pengolah Angka", e: "Berkas Excel disebut Workbook, sedangkan lembarnya dinamakan Worksheet." },
+  { q: "Nama perangkat lunak pengolah presentasi yang paling umum digunakan adalah...", o: ["Microsoft Word", "Microsoft Excel", "Microsoft PowerPoint", "Microsoft Outlook"], c: 2, topic: "Aplikasi Presentasi", e: "Microsoft PowerPoint adalah aplikasi pengolah presentasi standar." },
+  { q: "Fungsi utama dari aplikasi pengolah presentasi adalah...", o: ["Mempermudah penyampaian materi saat rapat/pembelajaran menggunakan media visual", "Mengolah rumus logaritma kompleks", "Memperbaiki sistem operasi yang rusak", "Mengurutkan nama siswa sesuai abjad secara otomatis"], c: 0, topic: "Aplikasi Presentasi", e: "Memudahkan penyampaian ide/informasi melalui bantuan visual." },
+  { q: "Contoh ekstensi berkas dokumen hasil simpanan dari aplikasi Microsoft Word modern adalah...", o: [".xlsx", ".docx", ".pptx", ".mp4"], c: 1, topic: "Aplikasi Pengolah Kata", e: "Format berkas Word modern adalah .docx." },
+  { q: "Ekstensi berkas standar untuk file lembar kerja yang dihasilkan oleh Microsoft Excel adalah...", o: [".docx", ".xlsx", ".pdf", ".txt"], c: 1, topic: "Aplikasi Pengolah Angka", e: "Format berkas standar Excel adalah .xlsx." },
+  { q: "Kepanjangan dari istilah format dokumen PDF adalah...", o: ["Portable Document Format", "Personal Data File", "Public Document Form", "Print Document Format"], c: 0, topic: "Teknologi Informasi", e: "PDF singkatan dari Portable Document Format." },
+  { q: "Fungsi utama dari aplikasi desktop publishing seperti Microsoft Publisher adalah...", o: ["Mengolah angka rumit", "Desain tata letak publikasi seperti brosur, kalender, dan kartu ucapan", "Menjalankan program pemrograman", "Mengolah dokumen surat-menyurat standar"], c: 1, topic: "Aplikasi Perkantoran", e: "Desktop Publishing berfokus pada layout dokumen publikasi/cetak." },
+  { q: "Pilihan orientasi cetak halaman kertas secara mendatar/horizontal disebut...", o: ["Portrait", "Landscape", "Center", "Justify"], c: 1, topic: "Aplikasi Pengolah Kata", e: "Landscape = mendatar/horizontal; Portrait = tegak/vertikal." },
+  { q: "Rumus/fungsi spreadsheet yang digunakan untuk menghitung nilai rata-rata dari sekumpulan data angka adalah...", o: ["=SUM()", "=AVERAGE()", "=COUNT()", "=MAX()"], c: 1, topic: "Formula Spreadsheet", e: "=AVERAGE() digunakan untuk mencari rata-rata." },
+  { q: "Fungsi spreadsheet yang digunakan untuk menjumlahkan nilai angka dengan syarat atau kriteria tertentu adalah...", o: ["=SUM()", "=SUMIF()", "=COUNTIF()", "=AVERAGEIF()"], c: 1, topic: "Formula Spreadsheet", e: "=SUMIF() menjumlahkan data dengan kriteria khusus." },
+  { q: "Fungsi teks pada spreadsheet yang digunakan untuk mencari posisi karakter atau kata tertentu dalam teks adalah...", o: ["SEARCH / FIND", "CONCATENATE", "LEFT", "MID"], c: 0, topic: "Formula Spreadsheet", e: "SEARCH/FIND menemukan indeks posisi karakter." },
+  { q: "Fungsi teks yang digunakan untuk menggantikan sebagian karakter teks dengan karakter baru berdasarkan posisi tertentu adalah...", o: ["UPPER", "REPLACE", "LOWER", "LEN"], c: 1, topic: "Formula Spreadsheet", e: "REPLACE mengganti substring teks berdasar posisi." },
+  { q: "Ukuran kertas standar yang memiliki dimensi 210 × 297 mm adalah...", o: ["A4", "F4 / Folio", "Letter", "Legal"], c: 0, topic: "Aplikasi Pengolah Kata", e: "210 x 297 mm = Ukuran A4." },
+  { q: "Ukuran kertas standar yang memiliki dimensi 215 × 330 mm adalah...", o: ["A4", "F4 / Folio", "A3", "B5"], c: 1, topic: "Aplikasi Pengolah Kata", e: "215 x 330 mm = Ukuran F4 / Folio." },
+  { q: "Langkah/urutan menu yang benar untuk menyisipkan gambar dari komputer ke dalam dokumen Microsoft Word adalah...", o: ["Home -> Paste -> Picture", "Insert -> Pictures -> This Device", "View -> Layout -> Insert Image", "File -> Save As -> Picture"], c: 1, topic: "Aplikasi Pengolah Kata", e: "Langkah menyisipkan gambar: Insert -> Pictures -> This Device." },
+  { q: "Fungsi dari tombol/fitur perintah Undo (Ctrl + Z) pada aplikasi pengolah kata adalah...", o: ["Membatalkan tindakan atau perintah terakhir yang telah dilakukan", "Mengulang kembali perintah yang baru saja dibatalkan", "Menyimpan dokumen secara otomatis", "Menghapus seluruh teks di halaman"], c: 0, topic: "Aplikasi Pengolah Kata", e: "Undo (Ctrl+Z) membatalkan aksi terakhir." }
 ];
 
-const dataIPS = [
-    { q: "1. Dampak positif iklim tropis terhadap sumber daya alam di Indonesia adalah...", o: ["A. Curah hujan tinggi, hutan hujan tropis tumbuh subur", "B. Salju merusak tanaman", "C. Tanah menjadi kering dan tandus", "D. Hasil laut berkurang"], a: 0, e: "Iklim tropis dengan curah hujan tinggi mendukung tumbuhnya hutan hujan tropis." },
-    { q: "2. Pengaruh iklim muson yang berganti setiap 6 bulan sekali di Indonesia adalah...", o: ["A. Petani tidak bisa menanam", "B. Menentukan pola tanam musim hujan dan kemarau", "C. Menghentikan ekonomi nelayan", "D. Erosi tanah abadi"], a: 1, e: "Muson mempengaruhi peralihan musim hujan dan kemarau bagi pola tanam." },
-    { q: "3. Pengaruh letak geologis Indonesia pada pertemuan 3 lempeng tektonik adalah...", o: ["A. Bebas gempa", "B. Kaya barang tambang dan tanah vulkanik subur", "C. Tidak ada gunung aktif", "D. Hayati laut berkurang"], a: 1, e: "Pertemuan lempeng membentuk banyak gunung api (tanah subur) & tambang mineral." },
-    { q: "4. Tenaga pembentuk permukaan bumi yang berasal dari dalam bumi dinamakan...", o: ["A. Eksogen", "B. Endogen", "C. Gravitasi", "D. Atmosfer"], a: 1, e: "Tenaga endogen berasal dari dalam interior bumi." },
-    { q: "5. Pelapukan, pengikisan (erosi), dan pengendapan merupakan contoh kerja tenaga...", o: ["A. Endogen", "B. Eksogen", "C. Tektonisme", "D. Vulkanisme"], a: 1, e: "Tenaga eksogen bekerja di luar permukaan bumi." },
-    { q: "6. Peristiwa pergeseran kerak bumi yang membentuk pegunungan/lipatan disebut...", o: ["A. Pelapukan", "B. Tektonisme", "C. Erosi", "D. Abrasi"], a: 1, e: "Tektonisme memicu terjadinya lipatan dan patahan permukaan bumi." },
-    { q: "7. Kelompok sumber daya alam yang tidak dapat diperbarui adalah...", o: ["A. Sinar matahari dan air", "B. Minyak bumi, gas alam, batu bara", "C. Hutan dan hewan", "D. Ikan dan rumput laut"], a: 1, e: "Bahan tambang fosil butuh jutaan tahun untuk terbentuk kembali." },
-    { q: "8. Hutan yang berfungsi melindungi tanah dari erosi dan mengatur tata air adalah...", o: ["A. Hutan Produksi", "B. Hutan Lindung", "C. Hutan Suaka Alam", "D. Hutan Wisata"], a: 1, e: "Hutan lindung berfungsi menjaga tata air dan mencegah erosi." },
-    { q: "9. Jenis hutan yang dimanfaatkan untuk diambil hasil kayunya dinamakan...", o: ["A. Hutan Lindung", "B. Hutan Produksi", "C. Hutan Suaka Margasatwa", "D. Hutan Cagar Alam"], a: 1, e: "Hutan produksi difungsikan untuk diambil kayu/hasil buminya." },
-    { q: "10. Fauna khas Indonesia di wilayah Peralihan contohnya adalah...", o: ["A. Gajah dan Harimau", "B. Komodo dan Anoa", "C. Cendrawasih dan Kanguru", "D. Badak dan Orangutan"], a: 1, e: "Komodo dan Anoa adalah fauna endemik tipe Peralihan." },
-    { q: "11. Fauna Indonesia tipe Asiatis banyak ditemukan di wilayah...", o: ["A. Papua dan Maluku", "B. Sulawesi dan NTT", "C. Sumatra, Jawa, Kalimantan", "D. Bali dan Papua"], a: 2, e: "Indonesia Barat (Asiatis) meliputi Sumatra, Jawa, dan Kalimantan." },
-    { q: "12. Garis yang memisahkan fauna Indonesia Tengah (Peralihan) dengan Timur (Australis) adalah...", o: ["A. Garis Wallacea", "B. Garis Weber", "C. Garis Khatulistiwa", "D. Garis Greenwich"], a: 1, e: "Garis Weber membatasi zona Peralihan dengan Australis." },
-    { q: "13. Tahapan awal pertambangan untuk mencari dan mengetahui lokasi bahan galian disebut...", o: ["A. Eksplorasi", "B. Eksploitasi", "C. Pengolahan", "D. Reklamasi"], a: 0, e: "Eksplorasi adalah tahapan pencarian dan penyelidikan awal." },
-    { q: "14. Potensi energi kemaritiman terbarukan dari gerakan pasang surut air laut disebut...", o: ["A. Energi Fosil", "B. Energi Gelombang/OTEC", "C. Energi Panas Bumi", "D. Energi Nuklir"], a: 1, e: "Gerakan pasang surut laut menghasilkan energi gelombang/OTEC." },
-    { q: "15. Penerapan ekonomi hijau (green economy) dalam mengelola SDA adalah...", o: ["A. Menebang hutan liar", "B. Penggunaan energi ramah lingkungan & daur ulang", "C. Membuang limbah ke sungai", "D. Bahan bakar fosil masif"], a: 1, e: "Ekonomi hijau memprioritaskan efisiensi energi & ramah lingkungan." },
-    { q: "16. Letak astronomis Indonesia pada 95°BT - 141°BT menyebabkan Indonesia memiliki...", o: ["A. Dua musim", "B. Tiga pembagian zona waktu", "C. Iklim tropis", "D. Bebas taifun"], a: 1, e: "Rentang bujur memicu pembagian 3 zona waktu (WIB, WITA, WIT)." },
-    { q: "17. Cendrawasih dan Kanguru Pohon merupakan kelompok fauna Indonesia tipe...", o: ["A. Asiatis", "B. Peralihan", "C. Australis", "D. Endemik Barat"], a: 2, e: "Papua/Indonesia Timur tergolong tipe Australis." },
-    { q: "18. Tahapan pertambangan berupa kegiatan penambangan/pengambilan endapan dinamakan...", o: ["A. Eksplorasi", "B. Prospeksi", "C. Eksploitasi", "D. Pemurnian"], a: 2, e: "Eksploitasi adalah proses pengerukan/penambangan bahan galian." },
-    { q: "19. Dampak geologis Indonesia yang berada di wilayah Ring of Fire adalah...", o: ["A. Banyak gunung berapi aktif", "B. Tidak ada gempa", "C. Daratan sempit", "D. Laut dangkal"], a: 0, e: "Ring of Fire menyebabkan munculnya deretan gunung api aktif." },
-    { q: "20. Contoh program ekonomi hijau pada sektor pertanian adalah...", o: ["A. Pestisida kimia masif", "B. Pembakaran lahan", "C. Pertanian organik dan pupuk kompos", "D. Penggundulan hutan"], a: 2, e: "Pertanian organik ramah terhadap kelestarian lingkungan." },
-    { q: "21. Secara geografis, Indonesia diapit dua benua dan dua samudera, yaitu...", o: ["A. Benua Asia-Australia & Samudera Hindia-Pasifik", "B. Asia-Eropa & Pasifik-Atlantik", "C. Amerika-Australia & Pasifik-Hindia", "D. Afrika-Asia & Hindia-Atlantik"], a: 0, e: "Indonesia diapit Benua Asia-Australia dan Samudera Hindia-Pasifik." },
-    { q: "22. Tujuan utama dari konsep pembangunan ekonomi hijau adalah...", o: ["A. Ambil untung tanpa peduli lingkungan", "B. Meningkatkan kesejahteraan sosial dengan mengurangi risiko lingkungan", "C. Menutup pabrik", "D. Mengganti kota jadi hutan"], a: 1, e: "Ekonomi hijau menyelaraskan ekonomi dan kelestarian alam." },
-    { q: "23. Tindakan sehari-hari yang mendukung ekonomi hijau adalah...", o: ["A. Plastik sekali pakai", "B. Hemat listrik dan memilah sampah", "C. Membakar sampah plastik", "D. Mengalirkan air terus"], a: 1, e: "Memilah sampah dan hemat listrik mendukung gaya hidup hijau." },
-    { q: "24. Letak Indonesia di jalur persilangan lalu lintas perdagangan dunia merupakan dampak letak...", o: ["A. Astronomis", "B. Geografis", "C. Geologis", "D. Morfologis"], a: 1, e: "Letak geografis di antara dua benua/samudera memicu posisi silang dunia." },
-    { q: "25. Pengaruh letak astronomis terhadap iklim menyebabkan curah hujan Indonesia...", o: ["A. Rendah", "B. Tinggi sepanjang tahun", "C. 1 bulan saja", "D. Berbentuk salju"], a: 1, e: "Wilayah tropis Indonesia memiliki curah hujan tinggi." },
-    { q: "26. Faktor geografis kepulauan menyebabkan keragaman budaya karena...", o: ["A. Terjadi isolasi geografis antarpulau", "B. Mudah berkumpul", "C. Bahasa sama", "D. Semua jadi nelayan"], a: 0, e: "Kondisi terisolasi antarpulau membentuk kebudayaan unik tiap daerah." },
-    { q: "27. Masyarakat pegunungan berpakaian tebal. Faktor fisik yang mempengaruhi adalah...", o: ["A. Iklim dan suhu udara", "B. Jenis tanah", "C. Sumber air", "D. Jarak ke laut"], a: 0, e: "Suhu udara dingin di pegunungan mempengaruhi cara berpakaian." },
-    { q: "28. Salah satu dari 7 unsur kebudayaan universal berkaitan dengan komunikasi adalah...", o: ["A. Sistem Bahasa", "B. Peralatan Hidup", "C. Organisasi Sosial", "D. Pengetahuan"], a: 0, e: "Sistem bahasa adalah sarana utama komunikasi budaya." },
-    { q: "29. Kebudayaan adalah keseluruhan sistem gagasan, tindakan, dan hasil karya. Pengertian menurut...", o: ["A. Koentjaraningrat", "B. Selo Soemardjan", "C. E.B. Tylor", "D. Ki Hajar Dewantara"], a: 0, e: "Koentjaraningrat mendefinisikan kebudayaan sebagai sistem gagasan & karya." },
-    { q: "30. Alat musik, tarian daerah, dan pakaian adat termasuk unsur budaya...", o: ["A. Kesenian", "B. Kekerabatan", "C. Bahasa", "D. Mata Pencaharian"], a: 0, e: "Tarian, musik, dan baju adat tergolong unsur kesenian." },
-    { q: "31. Nelayan di pesisir dan petani di dataran tinggi merupakan contoh unsur budaya...", o: ["A. Sistem Mata Pencaharian", "B. Sistem Religi", "C. Bahasa Daerah", "D. Organisasi Sosial"], a: 0, e: "Pekerjaan masyarakat termasuk sistem mata pencaharian." },
-    { q: "32. Candi Borobudur dan Prambanan merupakan wujud kebudayaan berbentuk...", o: ["A. Gagasan", "B. Aktivitas", "C. Artefak / Fisik", "D. Norma"], a: 2, e: "Bangunan Candi adalah bentuk kebudayaan fisik/artefak." },
-    { q: "33. Perbedaan rumah Lamin (Kalimantan) dan Honai (Papua) dipengaruhi oleh...", o: ["A. Kondisi alam dan bahan baku lokal", "B. Mata pencaharian sama", "C. Jumlah populasi", "D. Pengaruh asing"], a: 0, e: "Arsitektur tradisional menyesuaikan bahan alam lokal." },
-    { q: "34. Unsur budaya yang berfungsi sebagai sarana kepercayaan kepada Sang Pencipta adalah...", o: ["A. Sistem Religi", "B. Sistem Pengetahuan", "C. Sistem Bahasa", "D. Kesenian"], a: 0, e: "Sistem religi berkaitan dengan kepercayaan spiritual." },
-    { q: "35. Relief dataran rendah yang subur memicu perbedaan kebudayaan berupa...", o: ["A. Pemukiman padat & bercocok tanam", "B. Pembuat kapal", "C. Baju bulu binatang", "D. Bahasa asing"], a: 0, e: "Dataran rendah subur mendorong berkembangnya pertanian dan pemukiman." },
-    { q: "36. Tiga bentuk dasar hubungan sosial menurut Gillin dan Gillin adalah...", o: ["A. Antarindividu, individu-kelompok, antarkelompok", "B. Ekonomi, politik, budaya", "C. Primer, sekunder, tersier", "D. Langsung, tidak langsung, media"], a: 0, e: "Tiga bentuk dasar: antarindividu, individu-kelompok, antarkelompok." },
-    { q: "37. Pembauran budaya yang menghilangkan ciri khas kebudayaan asli disebut...", o: ["A. Akulturasi", "B. Asimilasi", "C. Akomodasi", "D. Kerjasama"], a: 1, e: "Asimilasi melebur budaya lama membentuk budaya baru." },
-    { q: "38. Kontak sosial tatap muka tanpa perantara media dinamakan kontak sosial...", o: ["A. Primer", "B. Sekunder", "C. Tidak langsung", "D. Tersier"], a: 0, e: "Kontak langsung tanpa media = Kontak Sosial Primer." },
-    { q: "39. Interaksi sosial yang mengarah pada persatuan dinamakan...", o: ["A. Disosiatif", "B. Asosiatif", "C. Konflik", "D. Kontravensi"], a: 1, e: "Asosiatif mengarah pada bentuk persatuan dan kerja sama." },
-    { q: "40. Usaha manusia untuk meredakan pertikaian/konflik dinamakan...", o: ["A. Asimilasi", "B. Akomodasi", "C. Kompetisi", "D. Kontravensi"], a: 1, e: "Akomodasi adalah proses penyelesaian konflik." },
-    { q: "41. Interaksi disosiatif berupa keraguan atau perasaan tidak suka tersembunyi disebut...", o: ["A. Konflik", "B. Kontravensi", "C. Persaingan", "D. Akulturasi"], a: 1, e: "Kontravensi ditandai rasa tidak suka yang dirahasiakan." },
-    { q: "42. Dua syarat utama terjadinya interaksi sosial adalah...", o: ["A. Kontak sosial dan Komunikasi", "B. Individu dan Barang", "C. Bahasa dan Budaya", "D. Konflik dan Penyelesaian"], a: 0, e: "Interaksi sosial butuh kontak sosial dan komunikasi." },
-    { q: "43. Akomodasi penyelesaian masalah melalui jalur pengadilan dinamakan...", o: ["A. Mediasi", "B. Arbitrase", "C. Adjudikasi", "D. Kompromi"], a: 2, e: "Adjudikasi adalah penyelesaian via jalur hukum/pengadilan." },
-    { q: "44. Penyelesaian konflik dengan pihak ketiga netral sebagai penasihat dinamakan...", o: ["A. Arbitrase", "B. Mediasi", "C. Konsiliasi", "D. Koersi"], a: 1, e: "Mediasi menghadirkan pihak ketiga netral yang tidak mengikat." },
-    { q: "45. Berebut mencapai keuntungan tanpa kekerasan dinamakan...", o: ["A. Persaingan (Kompetisi)", "B. Konflik", "C. Kontravensi", "D. Koersi"], a: 0, e: "Kompetisi adalah persaingan sehat tanpa kekerasan." },
-    { q: "46. Penyelesaian konflik di mana keputusan pihak ketiga mengikat disebut...", o: ["A. Mediasi", "B. Arbitrase", "C. Kompromi", "D. Toleransi"], a: 1, e: "Arbitrase memberikan wewenang pengambil keputusan mengikat pada pihak ketiga." },
-    { q: "47. Perebutan gelar juara lomba olahraga antar sekolah merupakan contoh...", o: ["A. Persaingan", "B. Konflik", "C. Kontravensi", "D. Asimilasi"], a: 0, e: "Lomba/pertandingan olahraga tergolong bentuk persaingan." },
-    { q: "48. Percampuran budaya tanpa menghilangkan ciri khas budaya asli disebut...", o: ["A. Asimilasi", "B. Akulturasi", "C. Akomodasi", "D. Kooperatif"], a: 1, e: "Akulturasi memadukan budaya tanpa menghilangkan identitas asal." },
-    { q: "49. Musik Dangdut hasil perpaduan Melayu dan India contoh dari...", o: ["A. Akulturasi", "B. Asimilasi", "C. Koersi", "D. Konflik"], a: 0, e: "Dangdut adalah bentuk akulturasi budaya Melayu dan India." },
-    { q: "50. Warga gotong royong membersihkan saluran air menunjukkan bentuk...", o: ["A. Kerjasama", "B. Akomodasi", "C. Asimilasi", "D. Akulturasi"], a: 0, e: "Gotong royong merupakan wujud utama kerjasama." }
+// BANK SOAL IPS (50 SOAL)
+const rawIPS = [
+  { q: "Indonesia berada di wilayah iklim tropis. Dampak positif dari iklim tropis terhadap sumber daya alam di Indonesia adalah...", o: ["Curah hujan tinggi dan sinar matahari sepanjang tahun, sehingga hutan hujan tropis tumbuh subur", "Sering terjadi cuaca ekstrim salju yang merusak tanaman", "Tanah menjadi kering dan tandus sehingga tidak cocok untuk pertanian", "Sumber daya laut menjadi sangat sedikit karena air panas"], c: 0, topic: "Kondisi Geografis & SDA", e: "Iklim tropis memberikan paparan matahari dan hujan sepanjang tahun yang mendukung hutan subur." },
+  { q: "Pengaruh iklim muson di Indonesia yang berganti setiap 6 bulan sekali terhadap sektor pertanian adalah...", o: ["Petani tidak bisa menanam padi sama sekali", "Menentukan pola tanam masyarakat antara musim hujan dan musim kemarau", "Menghentikan seluruh aktivitas ekonomi nelayan", "Menyebabkan tanah pertanian mengalami erosi abadi"], c: 1, topic: "Kondisi Geografis & SDA", e: "Angin muson mengatur pergantian musim yang mempengaruhi pola masa tanam." },
+  { q: "Pengaruh letak geologis Indonesia yang berada pada pertemuan tiga lempeng tektonik utama terhadap potensi SDA adalah...", o: ["Indonesia bebas dari gempa bumi", "Kaya akan barang tambang mineral dan memiliki tanah vulkanik yang subur", "Tidak memiliki gunung berapi aktif", "Keanekaragaman hayati laut berkurang"], c: 1, topic: "Kondisi Geografis & SDA", e: "Pertemuan lempeng memicu pembentukan magma, barang tambang, dan tanah vulkanik subur." },
+  { q: "Tenaga pembentuk permukaan bumi yang berasal dari dalam bumi dinamakan...", o: ["Tenaga Eksogen", "Tenaga Endogen", "Tenaga Gravitasi", "Tenaga Atmosfer"], c: 1, topic: "Proses Geologi", e: "Tenaga dari dalam bumi dinamakan tenaga endogen." },
+  { q: "Contoh dari proses pelapukan, pengikisan (erosi), dan pengendapan (sedimentasi) merupakan bentuk dari kerja tenaga...", o: ["Endogen", "Eksogen", "Tektonisme", "Vulkanisme"], c: 1, topic: "Proses Geologi", e: "Pelapukan, erosi, dan sedimentasi berasal dari luar bumi (Eksogen)." },
+  { q: "Peristiwa pergerakan atau pergeseran kerak bumi yang dapat menyebabkan terbentuknya pegunungan dan lipatan disebut...", o: ["Pelapukan", "Tektonisme", "Erosi", "Abrasi"], c: 1, topic: "Proses Geologi", e: "Tektonisme adalah dinamika pergerakan kerak bumi." },
+  { q: "Kelompok sumber daya alam yang tidak dapat diperbarui (unrenewable resources) adalah...", o: ["Sinar matahari, air, dan angin", "Minyak bumi, gas alam, dan batu bara", "Hutan, tanah, dan hewan", "Ikan, rumput laut, dan mutiara"], c: 1, topic: "Kondisi Geografis & SDA", e: "Bahan bakar fosil (minyak, gas, batu bara) butuh jutaan tahun untuk terbentuk kembali." },
+  { q: "Hutan yang memiliki fungsi utama untuk melindungi tanah dari erosi dan mengatur tata air tanah dinamakan...", o: ["Hutan Produksi", "Hutan Lindung", "Hutan Suaka Alam", "Hutan Wisata"], c: 1, topic: "Kondisi Geografis & SDA", e: "Hutan Lindung berfungsi menjaga tata air dan mencegah erosi." },
+  { q: "Jenis hutan yang dimanfaatkan untuk diambil hasil kayunya guna kebutuhan industri dinamakan...", o: ["Hutan Lindung", "Hutan Produksi", "Hutan Suaka Margasatwa", "Hutan Cagar Alam"], c: 1, topic: "Kondisi Geografis & SDA", e: "Hutan Produksi dikelola khusus untuk hasil kayu/non-kayu." },
+  { q: "Fauna khas Indonesia yang berada di wilayah Peralihan (antara Garis Wallacea dan Garis Weber) contohnya adalah...", o: ["Gajah dan Harimau", "Komodo dan Anoa", "Cendrawasih dan Kanguru Pohon", "Badak Bercula Satu dan Orangutan"], c: 1, topic: "Keragaman Fauna", e: "Komodo, Anoa, dan Babi Rusa adalah fauna khas tipe Peralihan." },
+  { q: "Fauna Indonesia tipe Asiatis banyak ditemukan di wilayah bagian...", o: ["Papua dan Maluku", "Sulawesi dan Nusa Tenggara", "Sumatra, Jawa, dan Kalimantan", "Bali dan Papua"], c: 2, topic: "Keragaman Fauna", e: "Tipe Asiatis berada di wilayah Barat (Sumatra, Jawa, Kalimantan)." },
+  { q: "Garis yang memisahkan wilayah fauna Indonesia bagian Tengah (Peralihan) dengan fauna bagian Timur (Australis) dinamakan...", o: ["Garis Wallacea", "Garis Weber", "Garis Khatulistiwa", "Garis Greenwich"], c: 1, topic: "Keragaman Fauna", e: "Garis Weber membatasi zona Peralihan dengan Australis." },
+  { q: "Tahapan awal dalam kegiatan pertambangan untuk mencari dan mengetahui keberadaan serta lokasi bahan galian disebut...", o: ["Eksplorasi", "Eksploitasi", "Pengolahan", "Reklamasi"], c: 0, topic: "Pertambangan & Ekonomi", e: "Eksplorasi adalah penjajakan/pencarian keberadaan tambang." },
+  { q: "Potensi energi kemaritiman terbarukan yang dapat dihasilkan dari gerakan pasang surut air laut dan gelombang dinamakan...", o: ["Energi Fosil", "Energi OTEC / Gelombang Laut", "Energi Panas Bumi", "Energi Nuklir"], c: 1, topic: "Pertambangan & Ekonomi", e: "Gelombang dan arus laut dapat dimanfaatkan sebagai energi terbarukan." },
+  { q: "Salah satu penerapan ekonomi hijau (green economy) dalam mengelola SDA di Indonesia adalah...", o: ["Menebang hutan secara liar untuk membuka lahan baru", "Penggunaan energi ramah lingkungan dan daur ulang limbah industri", "Membuang limbah pertambangan ke sungai", "Menggunakan bahan bakar fosil tanpa batas"], c: 1, topic: "Pertambangan & Ekonomi", e: "Ekonomi hijau memprioritaskan efisiensi energi dan kelestarian alam." },
+  { q: "Secara astronomis Indonesia terletak pada 6°LU - 11°LS dan 95°BT - 141°BT. Dampak dari letak bujurnya adalah Indonesia memiliki...", o: ["Dua musim", "Tiga pembagian zona waktu", "Beriklim tropis", "Bebas dari angin taifun"], c: 1, topic: "Kondisi Geografis & SDA", e: "Rentang bujur 95°BT - 141°BT membagi Indonesia menjadi WIB, WITA, dan WIT." },
+  { q: "Cendrawasih, Burung Kasuari, dan Kanguru Pohon merupakan kelompok fauna Indonesia tipe...", o: ["Asiatis", "Peralihan", "Australis", "Endemik Barat"], c: 2, topic: "Keragaman Fauna", e: "Hewan Papua dan sekitarnya tergolong tipe Australis." },
+  { q: "Tahapan pertambangan berupa kegiatan penambangan atau pengambilan endapan bahan galian dari bumi dinamakan...", o: ["Eksplorasi", "Prospeksi", "Eksploitasi", "Pemurnian"], c: 2, topic: "Pertambangan & Ekonomi", e: "Eksploitasi adalah proses pengambilan/pengerukan bahan galian." },
+  { q: "Dampak geologis Indonesia yang berada di wilayah Ring of Fire (Cincin Api Pasifik) adalah...", o: ["Banyak terdapat gunung berapi aktif", "Tidak pernah terjadi gempa bumi", "Wilayah daratan sangat sempit", "Tidak memiliki laut yang dalam"], c: 0, topic: "Proses Geologi", e: "Ring of Fire menyebabkan munculnya banyak gunung api aktif." },
+  { q: "Contoh program penerapan ekonomi hijau pada sektor pertanian adalah...", o: ["Penggunaan pestisida kimia secara berlebihan", "Pembakaran lahan sebelum menanam", "Pertanian organik dan pemanfaatan pupuk kompos", "Penggundulan hutan lindung"], c: 2, topic: "Pertambangan & Ekonomi", e: "Pertanian organik menjaga kualitas tanah dan mengurangi pencemaran." },
+  { q: "Secara geografis, Indonesia diapit oleh dua benua dan dua samudera, yaitu...", o: ["Benua Asia - Benua Australia & Samudera Hindia - Samudera Pasifik", "Benua Asia - Benua Eropa & Samudera Pasifik - Samudera Atlantik", "Benua Amerika - Benua Australia & Samudera Pasifik - Samudera Hindia", "Benua Afrika - Benua Asia & Samudera Hindia - Samudera Atlantik"], c: 0, topic: "Kondisi Geografis & SDA", e: "Asia-Australia serta Samudera Hindia-Pasifik." },
+  { q: "Tujuan utama dari konsep pembangunan ekonomi hijau adalah...", o: ["Mengambil keuntungan ekonomi sebanyak-banyaknya tanpa peduli lingkungan", "Meningkatkan kesejahteraan manusia dan keadilan sosial dengan mengurangi risiko lingkungan", "Menutup semua pabrik dan pertambangan", "Mengganti semua pemukiman menjadi hutan"], c: 1, topic: "Pertambangan & Ekonomi", e: "Mendorong pertumbuhan ekonomi tanpa merusak ekosistem." },
+  { q: "Tindakan masyarakat dalam kehidupan sehari-hari yang mendukung ekonomi hijau adalah...", o: ["Menggunakan kantong plastik sekali pakai", "Mematikan lampu yang tidak digunakan dan memilah sampah", "Membakar sampah plastik di pekarangan", "Membiarkan keran air terbuka terus-menerus"], c: 1, topic: "Pertambangan & Ekonomi", e: "Hemat energi dan mengelola sampah mendukung ekonomi hijau." },
+  { q: "Letak Indonesia yang berada di jalur persilangan lalu lintas perdagangan dunia merupakan dampak dari letak...", o: ["Astronomis", "Geografis", "Geologis", "Morfologis"], c: 1, topic: "Kondisi Geografis & SDA", e: "Posisi di antara dua benua dan dua samudera dinamakan letak geografis." },
+  { q: "Pengaruh letak astronomis terhadap kondisi iklim menyebabkan sebagian besar wilayah Indonesia memiliki curah hujan yang...", o: ["Sangat rendah", "Tinggi sepanjang tahun", "Hanya terjadi 1 bulan dalam setahun", "Selalu berbentuk salju"], c: 1, topic: "Kondisi Geografis & SDA", e: "Wilayah tropis dekat ekuator memiliki penguapan tinggi sehingga curah hujan tinggi." },
+  { q: "Faktor geografis berupa kondisi kepulauan di Indonesia menyebabkan timbulnya keragaman budaya karena...", o: ["Terjadinya isolasi geografis antar pulau sehingga masyarakat mengembangkan budayanya sendiri", "Seluruh masyarakat mudah berkumpul di satu pulau", "Bahasanya menjadi sama di setiap daerah", "Mata pencaharian masyarakat semuanya menjadi nelayan"], c: 0, topic: "Keragaman Budaya", e: "Isolasi geografis antar-pulau membentuk adat dan budaya yang unik di tiap daerah." },
+  { q: "Masyarakat yang tinggal di daerah pegunungan cenderung memiliki pakaian tebal dan bentuk rumah yang hangat. Faktor fisik yang mempengaruhi perbedaan budaya tersebut adalah...", o: ["Iklim dan suhu udara", "Jenis tanah", "Sumber air", "Jarak ke laut"], c: 0, topic: "Keragaman Budaya", e: "Suhu udara dingin di pegunungan mendorong adaptasi pakaian dan bangunan hangat." },
+  { q: "Salah satu dari 7 unsur kebudayaan universal menurut C. Kluckhohn yang berkaitan dengan cara manusia berkomunikasi adalah...", o: ["Sistem Bahasa", "Sistem Peralatan Hidup", "Sistem Organisasi Sosial", "Sistem Pengetahuan"], c: 0, topic: "Keragaman Budaya", e: "Bahasa adalah sarana komunikasi utama manusia." },
+  { q: "Kebudayaan adalah keseluruhan sistem gagasan, tindakan, dan hasil karya manusia dalam rangka kehidupan masyarakat yang dijadikan milik diri manusia dengan belajar. Pengertian kebudayaan ini dikemukakan oleh...", o: ["Koentjaraningrat", "Selo Soemardjan", "E.B. Tylor", "Ki Hajar Dewantara"], c: 0, topic: "Keragaman Budaya", e: "Definisi klasik kebudayaan di Indonesia dicetuskan oleh Prof. Koentjaraningrat." },
+  { q: "Alat musik tradisional, tarian daerah, dan pakaian adat merupakan contoh 7 unsur budaya universal pada kategori...", o: ["Kesenian", "Sistem Kekerabatan", "Bahasa", "Sistem Mata Pencaharian"], c: 0, topic: "Keragaman Budaya", e: "Tari, musik, dan seni rupa masuk dalam unsur Kesenian." },
+  { q: "Mata pencaharian masyarakat di daerah pesisir pantai sebagian besar sebagai nelayan, sedangkan di dataran tinggi sebagai petani teh. Hal ini merupakan contoh unsur budaya...", o: ["Sistem Mata Pencaharian / Ekonomi", "Sistem Religi", "Bahasa Daerah", "Organisasi Sosial"], c: 0, topic: "Keragaman Budaya", e: "Sistem mata pencaharian menyesuaikan dengan potensi alam sekitar." },
+  { q: "Candi Borobudur dan Candi Prambanan merupakan wujud kebudayaan dalam bentuk...", o: ["Gagasan / Ide", "Aktivitas / Tindakan", "Artefak / Fisik", "Norma Sosial"], c: 2, topic: "Keragaman Budaya", e: "Bangunan fisik peninggalan sejarah merupakan wujud artefak." },
+  { q: "Perbedaan bentuk rumah adat bentang/lamin di Kalimantan dengan rumah honai di Papua dipengaruhi oleh faktor geografis berupa...", o: ["Kondisi alam, bentang lahan, dan bahan baku lingkungan lokal", "Kesamaan mata pencaharian", "Jumlah populasi penduduk", "Pengaruh budaya asing yang sama"], c: 0, topic: "Keragaman Budaya", e: "Arsitektur rumah adat menyesuaikan material lokal dan iklim setempat." },
+  { q: "Karakteristik kebudayaan yang ada di Indonesia sangat beragam. Unsur budaya yang berfungsi sebagai sarana kepercayaan dan hubungan dengan Sang Pencipta adalah...", o: ["Sistem Religi", "Sistem Pengetahuan", "Sistem Bahasa", "Kesenian"], c: 0, topic: "Keragaman Budaya", e: "Sistem Religi mengatur aspek kepercayaan dan ritual keagamaan." },
+  { q: "Kondisi relief daratan berupa dataran rendah yang subur memicu perbedaan kebudayaan berupa...", o: ["Berkelompoknya masyarakat membentuk pemukiman padat dan sistem bercocok tanam", "Masyarakatnya hanya bisa membuat kapal laut", "Pakaian yang digunakan sangat tebal dari bulu binatang", "Bahasa yang digunakan sama dengan negara luar"], c: 0, topic: "Keragaman Budaya", e: "Dataran rendah subur mendorong agrikultur dan pemukiman padat." },
+  { q: "Menurut Gillin dan Gillin, bentuk dasar hubungan sosial interaksi sosial terbagi menjadi tiga, yaitu...", o: ["Hubungan antarindividu, individu dengan kelompok, dan antarkelompok", "Hubungan ekonomi, politik, dan budaya", "Hubungan primer, sekunder, dan tersier", "Hubungan langsung, tidak langsung, dan media"], c: 0, topic: "Interaksi Sosial", e: "Aktor interaksi sosial: antarindividu, individu-kelompok, dan antarkelompok." },
+  { q: "Proses pembauran dua kebudayaan yang disertai dengan hilangnya ciri khas kebudayaan asli sehingga membentuk kebudayaan baru disebut...", o: ["Akulturasi", "Asimilasi", "Akomodasi", "Kerja sama"], c: 1, topic: "Interaksi Sosial", e: "Asimilasi = A + B = C (ciri khas lama lebur)." },
+  { q: "Kontak sosial yang terjadi secara langsung tatap muka tanpa menggunakan perantara media dinamakan kontak sosial...", o: ["Primer", "Sekunder", "Tidak langsung", "Tersier"], c: 0, topic: "Interaksi Sosial", e: "Kontak primer = tatap muka langsung." },
+  { q: "Interaksi sosial yang mengarah pada persatuan dan kerja sama dinamakan interaksi sosial...", o: ["Disosiatif", "Asosiatif", "Konflik", "Kontravensi"], c: 1, topic: "Interaksi Sosial", e: "Interaksi Asosiatif = mengarah pada persatuan." },
+  { q: "Suatu usaha manusia untuk meredakan suatu pertikaian atau konflik guna mencapai kestabilan dinamakan...", o: ["Asimilasi", "Akomodasi", "Kompetisi", "Kontravensi"], c: 1, topic: "Interaksi Sosial", e: "Akomodasi adalah proses penyelesaian/peredaan konflik." },
+  { q: "Bentuk interaksi disosiatif yang ditandai oleh adanya ketidakpastian, keraguan, atau perasaan tidak suka yang disembunyikan dinamakan...", o: ["Konflik", "Kontravensi", "Persaingan", "Akulturasi"], c: 1, topic: "Interaksi Sosial", e: "Kontravensi adalah sikap tersembunyi seperti prasangka atau penolakan." },
+  { q: "Dua syarat utama terjadinya interaksi sosial adalah adanya...", o: ["Kontak sosial dan Komunikasi", "Individu dan Barang", "Bahasa dan Budaya", "Konflik dan Penyelesaian"], c: 0, topic: "Interaksi Sosial", e: "Interaksi sosial terjadi jika ada Kontak Sosial & Komunikasi." },
+  { q: "Bentuk akomodasi yang dilakukan dengan cara menyelesaikan masalah melalui jalur hukum/pengadilan dinamakan...", o: ["Mediasi", "Arbitrase", "Adjudikasi", "Kompromi"], c: 2, topic: "Interaksi Sosial", e: "Adjudikasi = Penyelesaian konflik via pengadilan." },
+  { q: "Penyelesaian konflik dengan melibatkan pihak ketiga yang netral sebagai penasihat (keputusan tidak mengikat) disebut...", o: ["Arbitrase", "Mediasi", "Konsiliasi", "Coercion"], c: 1, topic: "Interaksi Sosial", e: "Mediasi = Pihak ketiga netral dan sarannya tidak mengikat." },
+  { q: "Proses sosial di mana individu atau kelompok berebut untuk mencapai keuntungan tertentu tanpa menggunakan ancaman atau kekerasan dinamakan...", o: ["Persaingan (Kompetisi)", "Konflik", "Kontravensi", "Koersi"], c: 0, topic: "Interaksi Sosial", e: "Kompetisi = Perebutan tujuan secara sportif tanpa ancaman/kekerasan." },
+  { q: "Penyelesaian konflik sosial di mana pihak ketiga memiliki wewenang untuk memberikan keputusan yang mengikat kedua belah pihak dinamakan...", o: ["Mediasi", "Arbitrase", "Kompromi", "Toleransi"], c: 1, topic: "Interaksi Sosial", e: "Arbitrase = Pihak ketiga mengambil keputusan yang sifatnya mengikat." },
+  { q: "Perebutan gelar juara dalam turnamen sepak bola antar sekolah merupakan contoh interaksi sosial berbentuk...", o: ["Persaingan", "Konflik", "Kontravensi", "Asimilasi"], c: 0, topic: "Interaksi Sosial", e: "Lomba/turnamen olahraga adalah bentuk Kompetisi/Persaingan." },
+  { q: "Percampuran dua kebudayaan yang bersatu tanpa menghilangkan ciri khas kebudayaan aslinya dinamakan...", o: ["Asimilasi", "Akulturasi", "Akomodasi", "Kooperatif"], c: 1, topic: "Interaksi Sosial", e: "Akulturasi = A + B = AB (ciri lama tetap bertahan)." },
+  { q: "Seni musik Dangdut yang merupakan hasil perpaduan musik Melayu dan musik India tanpa menghilangkan karakter aslinya merupakan contoh dari...", o: ["Akulturasi", "Asimilasi", "Koersi", "Konflik"], c: 0, topic: "Interaksi Sosial", e: "Musik dangdut adalah contoh bentuk Akulturasi." },
+  { q: "Warga desa bergotong royong membersihkan saluran air menjelang musim hujan. Ilustrasi tersebut menunjukkan bentuk interaksi asosiatif jenis...", o: ["Kerjasama", "Akomodasi", "Asimilasi", "Akulturasi"], c: 0, topic: "Interaksi Sosial", e: "Gotong royong adalah wujud nyata Kerjasama." }
 ];
 
-let activeSubject = 'informa';
-let userAnswers = { informa: {}, ips: {} };
+// APP STATE
+let currentQuizType = '';
+let quizData = [];
+let userAnswers = {}; // { idx: { choice: null, flagged: false } }
+let currentIdx = 0;
+let timerInterval = null;
+let secondsElapsed = 0;
 
-function renderQuiz(subject, data) {
-    const container = document.getElementById(`${subject}-section`);
-    container.innerHTML = '';
+// SHUFFLE HELPER
+function shuffleArray(arr) {
+  let copy = JSON.parse(JSON.stringify(arr));
+  for (let i = copy.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
-    data.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'question-card';
-        card.innerHTML = `
-            <div class="question-text">${item.q}</div>
-            <div class="options">
-                ${item.o.map((opt, oIndex) => `
-                    <button class="option-btn" 
-                            id="btn-${subject}-${index}-${oIndex}"
-                            onclick="checkAnswer('${subject}', ${index},${oIndex})">
-                        ${opt}
-                    </button>
-                `).join('')}
-            </div>
-            <div class="explanation" id="exp-${subject}-${index}">
-                <strong>Pembahasan:</strong> ${item.e}
-            </div>
-        `;
-        container.appendChild(card);
+// INITIALIZE QUIZ
+function initQuiz(type) {
+  currentQuizType = type;
+  let source = (type === 'informa') ? rawInformatika : rawIPS;
+
+  // Process & Shuffle options per question
+  quizData = source.map((item, id) => {
+    let opts = item.o.map((text, i) => ({ text, isCorrect: i === item.c }));
+    let shuffledOpts = shuffleArray(opts);
+    let correctIdx = shuffledOpts.findIndex(o => o.isCorrect);
+
+    return {
+      id: id,
+      q: item.q,
+      o: shuffledOpts.map(o => o.text),
+      c: correctIdx,
+      topic: item.topic,
+      e: item.e
+    };
+  });
+
+  userAnswers = {};
+  quizData.forEach((_, idx) => {
+    userAnswers[idx] = { choice: null, flagged: false };
+  });
+
+  currentIdx = 0;
+  secondsElapsed = 0;
+
+  document.getElementById('screen-home').classList.add('hidden');
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+
+  document.getElementById('quiz-title').innerText = (type === 'informa') ? "💻 Informatika - Kelas 8" : "🌏 IPS - Kelas 8";
+
+  startTimer();
+  renderQuestion();
+  renderNavGrid();
+  saveStateToStorage();
+}
+
+// TIMER
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    let m = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+    let s = (secondsElapsed % 60).toString().padStart(2, '0');
+    document.getElementById('timer-display').innerText = `⏱️ Waktu: ${m}:${s}`;
+  }, 1000);
+}
+
+// RENDER QUESTION
+function renderQuestion() {
+  let item = quizData[currentIdx];
+  let state = userAnswers[currentIdx];
+
+  document.getElementById('tag-topic').innerText = item.topic;
+  document.getElementById('question-text').innerText = `${currentIdx + 1}. ${item.q}`;
+
+  // Progress Bar
+  let progressPercent = ((currentIdx + 1) / quizData.length) * 100;
+  document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+
+  // Render Options
+  let container = document.getElementById('options-container');
+  container.innerHTML = '';
+  let prefixes = ['A', 'B', 'C', 'D'];
+
+  item.o.forEach((optText, i) => {
+    let btn = document.createElement('button');
+    btn.className = 'btn-opt';
+    if (state.choice === i) btn.classList.add('selected');
+
+    btn.innerHTML = `<span class="opt-prefix">${prefixes[i]}.</span> <span>${optText}</span>`;
+    btn.onclick = () => selectOption(i);
+    container.appendChild(btn);
+  });
+
+  // Flag Button State
+  let flagBtn = document.getElementById('btn-flag');
+  if (state.flagged) {
+    flagBtn.classList.add('active');
+  } else {
+    flagBtn.classList.remove('active');
+  }
+
+  // Prev / Next Button State
+  document.getElementById('btn-prev').disabled = (currentIdx === 0);
+
+  updateNavGridVisuals();
+  saveStateToStorage();
+}
+
+// SELECT OPTION
+function selectOption(optIdx) {
+  userAnswers[currentIdx].choice = optIdx;
+  renderQuestion();
+}
+
+// TOGGLE FLAG
+function toggleFlag() {
+  userAnswers[currentIdx].flagged = !userAnswers[currentIdx].flagged;
+  renderQuestion();
+}
+
+// NAVIGATION
+function prevQuestion() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    renderQuestion();
+  }
+}
+
+function nextQuestion() {
+  if (currentIdx < quizData.length - 1) {
+    currentIdx++;
+    renderQuestion();
+  }
+}
+
+function jumpToQuestion(idx) {
+  currentIdx = idx;
+  renderQuestion();
+}
+
+// NAV GRID
+function renderNavGrid() {
+  let grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+
+  quizData.forEach((_, idx) => {
+    let numBtn = document.createElement('button');
+    numBtn.className = 'nav-num';
+    numBtn.innerText = idx + 1;
+    numBtn.id = `nav-num-${idx}`;
+    numBtn.onclick = () => jumpToQuestion(idx);
+    grid.appendChild(numBtn);
+  });
+  updateNavGridVisuals();
+}
+
+function updateNavGridVisuals() {
+  quizData.forEach((_, idx) => {
+    let btn = document.getElementById(`nav-num-${idx}`);
+    if (!btn) return;
+
+    let state = userAnswers[idx];
+    btn.className = 'nav-num';
+
+    if (idx === currentIdx) btn.classList.add('active');
+    if (state.choice !== null) btn.classList.add('answered');
+    if (state.flagged) btn.classList.add('flagged');
+  });
+}
+
+function toggleNavGrid() {
+  let grid = document.getElementById('nav-grid');
+  grid.classList.toggle('hidden');
+}
+
+// FINISH & EVALUATION
+function confirmFinish() {
+  let unanswered = Object.values(userAnswers).filter(a => a.choice === null).length;
+  let flagged = Object.values(userAnswers).filter(a => a.flagged).length;
+
+  let msg = "Apakah kamu yakin ingin menyelesaikan ujian ini?";
+  if (unanswered > 0 || flagged > 0) {
+    msg = `Perhatian:\n- Soal belum dijawab: ${unanswered}\n- Soal ditandai ragu: ${flagged}\n\nYakin ingin mengumpulkan sekarang?`;
+  }
+
+  if (confirm(msg)) {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  localStorage.removeItem('pst_quiz_saved');
+
+  let correctCount = 0;
+  let topicStats = {};
+
+  quizData.forEach((item, idx) => {
+    let userChoice = userAnswers[idx].choice;
+    let isCorrect = (userChoice === item.c);
+
+    if (isCorrect) correctCount++;
+
+    if (!topicStats[item.topic]) {
+      topicStats[item.topic] = { total: 0, wrong: 0 };
+    }
+    topicStats[item.topic].total++;
+    if (!isCorrect) topicStats[item.topic].wrong++;
+  });
+
+  let finalScore = Math.round((correctCount / quizData.length) * 100);
+
+  // Render Result Screen
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+
+  document.getElementById('final-score').innerText = finalScore;
+  document.getElementById('score-summary').innerText = `Menjawab Benar ${correctCount} dari ${quizData.length} Soal`;
+
+  // Advice & Analysis
+  let advice = document.getElementById('analysis-text');
+  if (finalScore >= 88) {
+    advice.innerText = "🔥 Luar biasa! Pemahaman kamu sudah sangat matang dan siap menghadapi ujian sungguhan dengan hasil maksimal.";
+  } else if (finalScore >= 72) {
+    advice.innerText = "👍 Hasil sudah bagus dan memenuhi standar KKM. Cermati beberapa materi yang masih ada kesalahan di bawah ini.";
+  } else {
+    advice.innerText = "📚 Kamu masih butuh latihan tambahan. Jangan patah semangat! Pelajari kembali pembahasan soal-soal di bawah.";
+  }
+
+  // Weakness Topic Identification
+  let weaknessContainer = document.getElementById('weakness-box');
+  weaknessContainer.innerHTML = '';
+  let weakTopics = Object.keys(topicStats).filter(t => topicStats[t].wrong > 0);
+
+  if (weakTopics.length > 0) {
+    let html = `<p style="font-size: 13px; font-weight:700; color: #f1f5f9; margin-bottom: 6px;">Topik yang perlu diperdalam lagi:</p><ul class="weakness-list">`;
+    weakTopics.forEach(t => {
+      html += `<li>⚠️ <strong>${t}</strong> (${topicStats[t].wrong} soal salah dari ${topicStats[t].total})</li>`;
     });
+    html += `</ul>`;
+    weaknessContainer.innerHTML = html;
+  }
+
+  // Render Full Review
+  renderReviewList();
 }
 
-function checkAnswer(subject, qIndex, optIndex) {
-    if (userAnswers[subject][qIndex] !== undefined) return; 
+function renderReviewList() {
+  let container = document.getElementById('review-list');
+  container.innerHTML = '';
+  let prefixes = ['A', 'B', 'C', 'D'];
 
-    const data = subject === 'informa' ? dataInformatika : dataIPS;
-    const correctOpt = data[qIndex].a;
-    
-    userAnswers[subject][qIndex] = optIndex;
+  quizData.forEach((item, idx) => {
+    let userChoice = userAnswers[idx].choice;
+    let isCorrect = (userChoice === item.c);
 
-    const selectedBtn = document.getElementById(`btn-${subject}-${qIndex}-${optIndex}`);
-    const correctBtn = document.getElementById(`btn-${subject}-${qIndex}-${correctOpt}`);
-    const expDiv = document.getElementById(`exp-${subject}-${qIndex}`);
+    let div = document.createElement('div');
+    div.className = `review-item ${isCorrect ? 'is-correct' : 'is-wrong'}`;
 
-    if (optIndex === correctOpt) {
-        selectedBtn.classList.add('correct');
-    } else {
-        selectedBtn.classList.add('wrong');
-        correctBtn.classList.add('correct');
-    }
+    let userChoiceStr = (userChoice !== null) ? `${prefixes[userChoice]}. ${item.o[userChoice]}` : '<em>(Tidak Dijawab)</em>';
+    let correctStr = `${prefixes[item.c]}. ${item.o[item.c]}`;
 
-    // Disable button pilihan setelah dijawab
-    for (let i = 0; i < 4; i++) {
-        document.getElementById(`btn-${subject}-${qIndex}-${i}`).disabled = true;
-    }
-
-    expDiv.style.display = 'block';
-    updateScore();
+    div.innerHTML = `
+      <div style="font-weight:700; margin-bottom:6px;">Soal #${idx + 1} (${item.topic})</div>
+      <div style="margin-bottom:10px;">${item.q}</div>
+      <div style="font-size:13px; margin-bottom:4px;">Jawaban Kamu: <strong style="color: ${isCorrect ? '#6ee7b7' : '#fca5a5'};">${userChoiceStr}</strong></div>
+      ${!isCorrect ? `<div style="font-size:13px; margin-bottom:8px;">Jawaban Benar: <strong style="color: #6ee7b7;">${correctStr}</strong></div>` : ''}
+      <div style="font-size:12.5px; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; margin-top: 8px;">
+        💡 <strong>Pembahasan:</strong> ${item.e}
+      </div>
+    `;
+    container.appendChild(div);
+  });
 }
 
-function updateScore() {
-    const data = activeSubject === 'informa' ? dataInformatika : dataIPS;
-    const answers = userAnswers[activeSubject];
-    
-    let score = 0;
-    let answered = 0;
-
-    Object.keys(answers).forEach(qIndex => {
-        answered++;
-        if (answers[qIndex] === data[qIndex].a) {
-            score++;
-        }
-    });
-
-    document.getElementById('score-display').innerText = score;
-    document.getElementById('total-answered').innerText = answered;
+// LOCAL STORAGE (SAVE / RESUME)
+function saveStateToStorage() {
+  let state = {
+    currentQuizType,
+    quizData,
+    userAnswers,
+    currentIdx,
+    secondsElapsed
+  };
+  localStorage.setItem('pst_quiz_saved', JSON.stringify(state));
+  checkSavedState();
 }
 
-function switchSubject(subject) {
-    activeSubject = subject;
-    
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.quiz-section').forEach(sec => sec.classList.remove('active'));
-
-    if (subject === 'informa') {
-        document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        document.getElementById('informa-section').classList.add('active');
-        document.getElementById('current-subject-title').innerText = 'Informatika';
-    } else {
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-        document.getElementById('ips-section').classList.add('active');
-        document.getElementById('current-subject-title').innerText = 'IPS';
-    }
-
-    updateScore();
+function checkSavedState() {
+  let saved = localStorage.getItem('pst_quiz_saved');
+  let btnResume = document.getElementById('btn-resume');
+  if (saved) {
+    btnResume.classList.remove('hidden');
+  } else {
+    btnResume.classList.add('hidden');
+  }
 }
 
-// Inisialisasi awal
-renderQuiz('informa', dataInformatika);
-renderQuiz('ips', dataIPS);
+function resumeQuiz() {
+  let saved = localStorage.getItem('pst_quiz_saved');
+  if (!saved) return;
+
+  let state = JSON.parse(saved);
+  currentQuizType = state.currentQuizType;
+  quizData = state.quizData;
+  userAnswers = state.userAnswers;
+  currentIdx = state.currentIdx;
+  secondsElapsed = state.secondsElapsed;
+
+  document.getElementById('screen-home').classList.add('hidden');
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+
+  document.getElementById('quiz-title').innerText = (currentQuizType === 'informa') ? "💻 Informatika - Kelas 8" : "🌏 IPS - Kelas 8";
+
+  startTimer();
+  renderQuestion();
+  renderNavGrid();
+}
+
+function goHome() {
+  clearInterval(timerInterval);
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-home').classList.remove('hidden');
+  checkSavedState();
+}
+
+// INITIAL CHECK ON LOAD
+window.onload = function() {
+  checkSavedState();
+};
 </script>
-
 </body>
 </html>
